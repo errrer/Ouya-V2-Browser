@@ -16,14 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
-      # Installs the Android SDK command-line tools and accepts licences so Gradle can fetch
-      # platform 34 and build-tools on its own.
-      - uses: android-actions/setup-android@v3
+      # GitHub's Ubuntu runners already ship the Android SDK (ANDROID_HOME). Accepting the licences
+      # up front lets Gradle download any missing platform or build-tools package by itself.
+      # (`|| true`: `yes` is killed by SIGPIPE when sdkmanager finishes, which pipefail reports as failure.)
+      - name: Accept Android SDK licences
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
 
       - uses: gradle/actions/setup-gradle@v4
 
