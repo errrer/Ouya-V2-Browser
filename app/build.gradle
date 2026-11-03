@@ -1,0 +1,41 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'app.ouyabrowser'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'app.ouyabrowser'
+        // Android 4.1 (Jelly Bean) = API 16, which is what the OUYA runs.
+        minSdk 16
+        targetSdk 34
+        versionCode 1
+        versionName '0.1.0'
+
+        // The OUYA's Tegra 3 is 32-bit ARM. Dropping x86 halves the Crosswalk native payload.
+        ndk {
+            abiFilters 'armeabi-v7a'
+        }
+    }
+
+    buildTypes {
+        release {
+            // Crosswalk's Java classes are referenced from native code (JNI), so they must not be
+            // renamed or stripped. Our own code is a few dozen KB, so minifying would gain nothing.
+            minifyEnabled false
+            // Signed with the debug key so the APK installs directly via adb / sideloading.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+dependencies {
+    implementation 'org.xwalk:xwalk_core_library:23.53.589.4'
+}

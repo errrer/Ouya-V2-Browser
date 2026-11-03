@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OUYA Browser</title>
+<style>
+  html,body{margin:0;background:#15151a;color:#eee;font-family:sans-serif}
+  body{padding:5vh 5vw}
+  h1{font-size:4.6vw;margin:0 0 .3vw;color:#ff7a1a;letter-spacing:.1vw}
+  p.sub{margin:0 0 4vh;color:#8a8a99;font-size:2vw}
+  .grid{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;margin:-1vw}
+  a.tile{display:block;box-sizing:border-box;width:29.3vw;margin:1.2vw;padding:3.2vh 2vw;
+         background:#23232b;border:.3vw solid #2f2f39;border-radius:1.2vw;color:#fff;text-decoration:none}
+  a.tile:hover,a.tile:focus{background:#ff7a1a;border-color:#ff7a1a;color:#000}
+  a.tile b{display:block;font-size:2.8vw;margin-bottom:.6vh}
+  a.tile span{font-size:1.7vw;opacity:.7}
+  .tips{margin-top:5vh;color:#8a8a99;font-size:1.8vw;line-height:1.6}
+  .tips kbd{display:inline-block;min-width:2.2vw;padding:0 .7vw;margin-right:.3vw;border-radius:.5vw;
+            background:#2f2f39;color:#ff7a1a;font:bold 1.7vw sans-serif;text-align:center}
+</style>
+</head>
+<body>
+  <h1>OUYA Browser</h1>
+  <p class="sub">Move the cursor with the left stick and press O to click.</p>
+  <div class="grid">
+    <a class="tile" href="https://github.com/"><b>GitHub</b><span>github.com</span></a>
+    <a class="tile" href="https://html.duckduckgo.com/html/"><b>Search</b><span>DuckDuckGo</span></a>
+    <a class="tile" href="https://en.wikipedia.org/"><b>Wikipedia</b><span>en.wikipedia.org</span></a>
+    <a class="tile" href="https://news.ycombinator.com/"><b>Hacker News</b><span>news.ycombinator.com</span></a>
+    <a class="tile" href="https://archive.org/"><b>Internet Archive</b><span>archive.org</span></a>
+    <a class="tile" href="https://wiby.me/"><b>Wiby</b><span>search for the old web</span></a>
+  </div>
+  <div class="tips">
+    <kbd>Y</kbd> menu &nbsp; <kbd>U</kbd> address / search &nbsp; <kbd>A</kbd> back &nbsp;
+    <kbd>L1</kbd><kbd>R1</kbd> tabs &nbsp; <kbd>L2</kbd><kbd>R2</kbd> page up / down<br>
+    Right stick scrolls. Click a text field to open the on-screen keyboard.
+  </div>
+</body>
+</html>
