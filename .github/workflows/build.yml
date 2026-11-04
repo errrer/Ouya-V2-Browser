@@ -29,15 +29,24 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Probe Crosswalk repository
+      - name: Probe engine repositories
         continue-on-error: true
         run: |
-          B=https://download.01.org/crosswalk/releases/crosswalk/android/maven2/org/xwalk
-          for u in "$B/xwalk_core_library/23.53.589.4/xwalk_core_library-23.53.589.4.pom" \
-                   "$B/xwalk_core_library/maven-metadata.xml" "$B/xwalk_core_library/" \
-                   "https://download.01.org/crosswalk/releases/crosswalk/android/maven2/"; do
-            echo "== $u"; curl -sS -L -m 30 -o /tmp/p.out -w 'HTTP %{http_code}\n' "$u" || true; head -c 600 /tmp/p.out; echo
+          probe() { printf '== %s\n' "$1"; code=$(curl -sS -L -m 40 -o /tmp/p.out -w '%{http_code}' "$1" 2>&1 || true); echo "HTTP $code"; head -c "${2:-250}" /tmp/p.out | tr '\n' ' '; echo; }
+          XP=org/xwalk/xwalk_core_library/23.53.589.4/xwalk_core_library-23.53.589.4
+          for base in https://maven.aliyun.com/repository/public https://maven.aliyun.com/repository/jcenter https://maven.aliyun.com/repository/google \
+                      https://repo.huaweicloud.com/repository/maven https://mirrors.cloud.tencent.com/nexus/repository/maven-public \
+                      https://jcenter.bintray.com https://repo.spring.io/libs-release https://jitpack.io; do
+            probe "$base/$XP.pom" 120
           done
+          probe "https://web.archive.org/web/2022/https://download.01.org/crosswalk/releases/crosswalk/android/maven2/$XP.aar" 120
+          probe "https://web.archive.org/web/2022/https://download.01.org/crosswalk/releases/crosswalk/android/maven2/$XP.pom" 300
+          probe "https://web.archive.org/web/2022/https://download.01.org/crosswalk/releases/crosswalk/android/maven2/org/xwalk/xwalk_core_library/" 300
+          echo "######## GeckoView"
+          probe "https://maven.mozilla.org/maven2/org/mozilla/geckoview/geckoview-armeabi-v7a/maven-metadata.xml" 100
+          curl -sS -m 40 https://maven.mozilla.org/maven2/org/mozilla/geckoview/geckoview-armeabi-v7a/maven-metadata.xml | grep -o '<version>6[5-9][^<]*' | head -30
+          probe "https://maven.mozilla.org/maven2/org/mozilla/geckoview/geckoview/maven-metadata.xml" 100
+          curl -sS -m 40 https://maven.mozilla.org/maven2/org/mozilla/geckoview/geckoview/maven-metadata.xml | grep -o '<version>6[5-9][^<]*' | head -30
 
       - name: Build release APK
         run: ./gradlew --no-daemon assembleRelease
