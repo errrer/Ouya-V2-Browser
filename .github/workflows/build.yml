@@ -29,6 +29,16 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      - name: Probe Crosswalk repository
+        continue-on-error: true
+        run: |
+          B=https://download.01.org/crosswalk/releases/crosswalk/android/maven2/org/xwalk
+          for u in "$B/xwalk_core_library/23.53.589.4/xwalk_core_library-23.53.589.4.pom" \
+                   "$B/xwalk_core_library/maven-metadata.xml" "$B/xwalk_core_library/" \
+                   "https://download.01.org/crosswalk/releases/crosswalk/android/maven2/"; do
+            echo "== $u"; curl -sS -L -m 30 -o /tmp/p.out -w 'HTTP %{http_code}\n' "$u" || true; head -c 600 /tmp/p.out; echo
+          done
+
       - name: Build release APK
         run: ./gradlew --no-daemon assembleRelease
 
